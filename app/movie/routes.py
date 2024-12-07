@@ -11,7 +11,13 @@ from app.movie.utils import convert_movie_schema
 router = APIRouter(tags=["movie"])
 
 
-@router.post("/create", response_model=MovieCreateWithEnum, status_code=201)
+@router.post(
+    "/create",
+    response_model=MovieCreateWithEnum,
+    status_code=201,
+    summary="Добавление фильма",
+    description="Поле country реализовано через Enum, посмотреть все страны можно введя некорректное значение",
+)
 async def create_movie(
     movie: MovieCreateWithEnum, session: AsyncSession = Depends(db.get_async_session)
 ):
@@ -27,7 +33,11 @@ async def create_movie(
         raise HTTPException(status_code=500, detail="Произошла ошибка сервера.")
 
 
-@router.put("/change/{movie_id}", response_model=MovieUpdate)
+@router.put(
+    "/change/{movie_id}",
+    response_model=MovieUpdate,
+    summary="Изменение одного или нескольких полей в фильме",
+)
 async def change_movie_data(
     movie_id: int,
     data: MovieUpdateWithEnum,
@@ -45,7 +55,9 @@ async def change_movie_data(
         raise HTTPException(status_code=500, detail="Произошла ошибка сервера.")
 
 
-@router.delete("/delete/{movie_id}", status_code=204)
+@router.delete(
+    "/delete/{movie_id}", status_code=204, summary="Удаление фильма по movie_id"
+)
 async def delete_movie(
     movie_id: int, session: AsyncSession = Depends(db.get_async_session)
 ):

@@ -7,7 +7,11 @@ from app.database import db
 router = APIRouter(tags=["favorites"])
 
 
-@router.post("/users/{user_id}/favorites", status_code=201)
+@router.post(
+    "/users/{user_id}/favorites",
+    status_code=201,
+    summary="Добавление фильма в израбнное по user_id и movie_id",
+)
 async def add_favorite(
     user_id: int, movie_id: int, session: AsyncSession = Depends(db.get_async_session)
 ):
@@ -16,7 +20,11 @@ async def add_favorite(
     return fav
 
 
-@router.delete("/users/{user_id}/favorites/{movie_id}", status_code=204)
+@router.delete(
+    "/users/{user_id}/favorites/{movie_id}",
+    status_code=204,
+    summary="Удаление фильма из избранного по user_id и movie_id",
+)
 async def delete_favorite(
     user_id: int, movie_id: int, session: AsyncSession = Depends(db.get_async_session)
 ):
@@ -24,7 +32,7 @@ async def delete_favorite(
     await FavoriteService(session).delete_favorite(user_id, movie_id)
 
 
-@router.get("/users/{user_id}/favorites")
+@router.get("/users/{user_id}/favorites", summary="Получение всех фильмов по id юзера")
 async def get_favorites(
     user_id: int, session: AsyncSession = Depends(db.get_async_session)
 ):

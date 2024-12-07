@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.exceptions import ResponseValidationError
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -10,7 +9,13 @@ from .schemas import UserCreate, UserUpdate
 router = APIRouter(tags=["user"])
 
 
-@router.post("/create", status_code=201, response_model=UserCreate)
+@router.post(
+    "/create",
+    status_code=201,
+    response_model=UserCreate,
+    summary="Создание юзера.",
+    description="Создание юзера по имени, фамилии и никнейму.",
+)
 async def create_user(
     data: UserCreate, session: AsyncSession = Depends(db.get_async_session)
 ):
@@ -22,7 +27,12 @@ async def create_user(
         raise HTTPException(status_code=422, detail=e.errors())
 
 
-@router.put("/change/{user_id}", response_model=UserUpdate)
+@router.put(
+    "/change/{user_id}",
+    response_model=UserUpdate,
+    summary="Изменение данных юзера.",
+    description="Изменение одного или нескольких полей юзера.",
+)
 async def change_user_data(
     user_id: int,
     data: UserUpdate,
@@ -38,7 +48,12 @@ async def change_user_data(
         raise HTTPException(status_code=422, detail=e.errors())
 
 
-@router.delete("/delete/{user_id}", status_code=204)
+@router.delete(
+    "/delete/{user_id}",
+    status_code=204,
+    summary="Удаление юзера",
+    description="Удаление юзера по полю user_id",
+)
 async def delete_user(
     user_id: int, session: AsyncSession = Depends(db.get_async_session)
 ):

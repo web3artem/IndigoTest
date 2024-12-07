@@ -12,7 +12,9 @@ class User(Base):
     second_name: Mapped[str] = mapped_column(String(length=50))
     nickname: Mapped[str] = mapped_column(String(length=50), unique=True)
 
-    favorites = relationship("Favorite", back_populates="user", cascade="all, delete-orphan")
+    favorites = relationship(
+        "Favorite", back_populates="user", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"{self.id} | {self.nickname}"

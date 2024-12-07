@@ -18,7 +18,9 @@ class Movie(Base):
     country: Mapped[str] = mapped_column(String(length=60))
     director: Mapped[str] = mapped_column(String(100))
 
-    favorites = relationship("Favorite", back_populates="movie", cascade="all, delete-orphan")
+    favorites = relationship(
+        "Favorite", back_populates="movie", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"{self.id} | {self.title}"
